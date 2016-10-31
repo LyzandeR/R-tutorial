@@ -14,5 +14,5 @@ temp_file <- tempfile('test', fileext = '.html')
 download.file('https://raw.githubusercontent.com/LyzandeR/R-tutorial/master/R-Tutorial.html', temp_file)
 
 #view it on browser
-browseURL(a)
+browseURL(temp_file)
 ```
