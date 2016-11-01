@@ -1,6 +1,6 @@
 ## R Tutorial
 
-A basic to intermediate R tutorial slides.
+Basic to intermediate R presentation (ios slides).
 
 ## View on browser
 

@@ -23,7 +23,7 @@ maintained by the R Core team, member of which is John Chambers.
 ## GNU Project {.smaller}
 
 <div class="columns-2">
-  <img src="Richard.jpg" height="400px" width="350px"/>
+  <img src="RS.jpg" height="400px" width="350px"/>
 
 The GNU project was announced on 27 Sept 1983 by Richard Stallman at MIT. It is a free software,
 mass collaboration project, aimed to give users the freedom to use software with the following
@@ -53,3 +53,14 @@ typeof(TRUE)
 
 ## Data Structures
 
+- 1 Dimensional 
+  - Atomic Vector
+  - List
+- 2 Dimensional
+  - Matrix
+  - Dataframe
+- Multi Dimensional
+  - Array
+  - Nested Lists
+
+## 1 Dimensional Data Structures     
