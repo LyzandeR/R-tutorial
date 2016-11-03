@@ -4,10 +4,15 @@ author: "Theo Boutaris"
 date: "31 October 2016"
 output: 
   ioslides_presentation:
-    css: rtutorial.css
-    logo: R-logo.jpg
+    widescreen: true
+    logo: pics/R-logo.jpg
 
 ---
+
+```{R, echo = FALSE}
+library(knitr)
+suppressWarnings(library(tableHTML))
+```
 
 ## History of R
 
@@ -23,7 +28,7 @@ maintained by the R Core team, member of which is John Chambers.
 ## GNU Project {.smaller}
 
 <div class="columns-2">
-  <img src="RS.jpg" height="400px" width="350px"/>
+  <img src="pics/RS.jpg" height="400px" width="350px"/>
 
 The GNU project was announced on 27 Sept 1983 by Richard Stallman at MIT. It is a free software,
 mass collaboration project, aimed to give users the freedom to use software with the following
@@ -35,6 +40,19 @@ rights:
 - modify
 
 And therefore free software was created (free to imply freedom).
+</div>
+
+## Presentation Structure
+
+This presentation follows the structure of the book "Advanced-R" by Hadley Wickham. If you want
+to dive into deep waters with R, the book is highly recommented. 
+
+The book is available for free at [http://adv-r.had.co.nz/](http://adv-r.had.co.nz/).
+
+## Chapter 1
+
+<div class=chapter style='font-size:70px;margin-top:150px'>
+Data Types and Data Structures
 </div>
 
 ## Data Types {.build .smaller}
@@ -49,18 +67,720 @@ typeof(5L)
 typeof(TRUE)
 ```
 
-                                       Any more?
+<div class="centered">
+Any more?
+</div>
 
-## Data Structures
+## Data Structures in Base R
 
 - 1 Dimensional 
-  - Atomic Vector
-  - List
+    - Atomic Vector
+    - List
+    - Factor
 - 2 Dimensional
-  - Matrix
-  - Dataframe
+    - Matrix
+    - Dataframe
 - Multi Dimensional
-  - Array
-  - Nested Lists
+    - Array
+    - Nested Lists
 
-## 1 Dimensional Data Structures     
+## 1 Dimensional Data Structures p.1
+
+```{R}
+#atomic vector
+c(1, 2, 3)
+
+#list
+list(1, 'a', TRUE)
+```
+
+## 1 Dimensional Data Structures p.2
+
+```{R}
+#factor
+factor(letters[1:5])
+```
+
+## 2 Dimensional Data Structures
+
+```{R}
+#matrix
+matrix(1:12, ncol = 4)
+
+#data.frame
+data.frame(a = 1:3, b = letters[1:3])
+```
+
+## Multi Dimensional Data Structures {.smaller}
+
+<div class="columns-2">
+```{R}
+#array
+array(1:8, c(2, 2, 2))
+```
+
+\   
+\      
+\      
+\ 
+
+```{R}
+#nested lists
+list(list('a'), 
+     list(data.frame(a = 1:2), 
+     list(letters[1:5])))
+```
+</div>
+
+## Chapter Summary 
+
+4 Data Types
+
+    - Integer
+    - Character
+    - Double
+    - Logical
+
+Structures:
+
+<div class=table1 style='display:table;margin:0 auto;'>
+```{R, echo = FALSE}
+mydat <- data.frame(c('1 Dimension', '2 Dimensions', 'Multi Dimensional'),
+                    c('atomic vector', 'matrix', 'array'),
+                    c('list', 'data.frame', 'nested lists'))
+
+names(mydat) <- c(' ', 'Homogenous', 'Heterogenous')
+
+tableHTML(mydat, theme = 'rshiny-blue', rownames = FALSE)
+```
+</div>
+
+## Coercion Rules {.build .smaller}
+
+```{R}
+c(1, 'Hello World')
+
+c(1, TRUE)
+
+c(TRUE, 3)
+
+c(TRUE, 'Hello World', 1)
+```
+
+<div class="centered">
+logical < integer < double < character
+</div>
+
+## Chapter 2
+
+<div class=chapter style='font-size:70px;margin-top:150px'>
+Subsetting
+</div>
+
+## Subsetting {.build}
+
+How many functions do you know?
+
+> - [
+> - [[
+> - $
+> - subset <-- evil function
+
+## [ function - 1 Dimension DS 
+
+```{R}
+#1 Dimension - use only for atomic vectors or factors
+#1:5 is an atomic vector (of type integer) containing numbers 1 to 5
+#letters is a built-in dataset containing all the lower case latin letters
+#subsetting letters returning the first 5 letters
+letters[1:5]
+
+#same for factors
+factor(letters[1:5])
+```
+
+## [ function - 2 Dimensions DS p.1 {.build}
+
+```{R}
+#use it for matrices
+mymat <- matrix(1:9, ncol = 3)
+
+#what do you think?
+mymat[1:2]
+
+#but
+mymat[, 1:2]
+```
+
+## [ function - 2 Dimensions DS p.2 {.build}
+
+```{R}
+#use it for data.frames
+mydat <- data.frame(a = 1:3, b = 4:6)
+
+#what do you think?
+mydat[1]
+
+#but
+mydat[, 1]
+```
+
+## [ function - 2 Dimensions DS p.2 {.build}
+
+```{R}
+#also
+mydat[3, 2]
+
+#and 
+mydat[, 1:2]
+
+```
+
+## [[ function - Use for lists {.build}
+
+Can be used for 1 element.
+
+```{R}
+mylist <- list(abc = 'a', adb = 1, ba = c(1, 2))
+
+#get first element
+mylist[[1]]
+
+#can also chain
+mylist[[3]][1]
+```
+
+## $ function - Same as [[ {.smaller .build}
+
+The `$` function is the same sas `[[`.
+
+Quoting from ?\`$\`:
+
+Both `[[` and `$` select a single element of the list. The main difference is that `$` does not 
+allow computed indices, whereas `[[` does. `x$name` is equivalent to `x[["name", exact = FALSE]]`.
+
+```{R}
+mylist$abc
+
+mylist$a
+
+mylist$b
+```
+
+## subset function - Use with caution
+
+`subset` is a very popular function among beginners since it uses a function with the name subset
+which subconsciously makes it feel easier than using [, [[ and $. However, `subset` uses non-standard
+evaluation which makes it extremely dangerous for using in application development.
+
+`subset` is only meant to be used in **interactive** sessions (i.e. when working on Rstudio, Rgui 
+or similar IDE).
+
+## Chapter Summary 
+
+Use [ for atomic vectors, factors, matrices and data.frames (at least until you feel comfortable
+with what they do for each data structure).
+
+Use [[ and $ for lists at least at the beginning. Remember that a **data.frame is in reality
+a list of lists**!
+
+Try not to use `subset` in general.
+
+## Chapter 3
+
+<div class=chapter style='font-size:70px;margin-top:150px'>
+Vocabulary
+</div>
+
+## Vocabulary p.1 {.smaller}
+
+R is a functional programming language which means that a huge amount of functions exist already!
+
+Part of mastering the R programming language is having a good vocabulary (otherwise you will 
+find yourselves re-inventing the wheel on many occassions!).
+
+I have included the most used functions below but ou can find a more comprehensive vocabulary guide 
+here:
+
+[Vocabulary](http://adv-r.had.co.nz/Vocabulary.html)
+
+First Functions
+
+```{R, eval = FALSE}
+#most popular function
+#http://stackoverflow.com/questions/1295955/what-is-the-most-useful-r-trick
+#check structure of object
+str
+#see the documentation for function - same as help()
+?
+```
+
+## Vocabulary p.2
+
+Important Operators
+
+```{R, eval = FALSE}
+#is x in y?
+%in%
+#assignment operators
+=, <-, <<-
+#subset operators
+$, [, [[, head, tail, subset
+#evaluate expression in data environment
+with
+#get object from text
+get
+```
+
+## Vocabulary p.3
+
+Math Operators
+
+```{R, eval = FALSE}
+#calculations
+*, +, -, /, ^, %%
+#max, min, sum
+max, min, sum
+#statistics
+mean, median, cor, sd, var
+#comparison
+<, >, <=, >=, !=, ==
+```
+
+## Vocabulary p.4
+
+Functions used in function definitions
+
+```{R, eval = FALSE}
+#function definition
+function
+#missing argument - better to initiate with NULL 
+missing
+#function returns
+return, invisible
+```
+
+Logical Operators
+
+```{R, eval = FALSE}
+#and or xor not
+&, |, xor, !
+#all or any
+all, any
+```
+
+## Vocabulary p.5
+
+Data Structures or to do with data structures
+
+```{R, eval = FALSE}
+#data.structures
+c, matrix, data.frame, list
+#dimensions of data structures
+length, dim, ncol, nrow
+#binding
+cbind, rbind
+#making vectors
+rev, rep, seq, sample
+```
+
+## Vocabulary p.6
+
+Control Flow
+
+```{R, eval = FALSE}
+#ifs
+if, if else, switch, ifelse
+#loops
+for, while, next, break
+```
+
+Apply and friends
+
+```{R, eval = FALSE}
+#simple apply in base R - for loop
+apply, 
+#apply functions in C implementations (C implemented i.e. fast)
+lapply, sapply, tapply
+#personal favourite (also C implemented for-loop)
+vapply 
+```
+
+## Vocabulary p.7
+
+Other Data Structures
+
+```{R, eval = FALSE}
+#factors
+factor
+#dates
+as.Date, as.POSIXct, difftime
+```
+
+I/O
+
+```{R, eval = FALSE}
+#reading files
+read.table, read.csv, load
+#printing functions (also to files)
+sink, capture.output, print, cat
+#writing files
+write.table, write.csv, save
+```
+
+## Chapter Summary
+
+R is a functional programming language and therefore the more functions we know the easier it is 
+to perform various actions in R. Mastering them takes time, but the more you use them the easier it
+will become!
+
+## Chapter 4
+
+<div class=chapter style='font-size:70px;margin-top:150px'>
+Functions
+</div>
+
+## Functions
+
+R in its core is a function programming language, so solid foundation of how functions work is 
+essential when working with R.
+
+John Chambers has said:
+
+"To understand computations in R, two slogans are helpful:
+
+- Everything that exists is an object.
+- Everything that happens is a function call."
+
+## Function Components {.smaller}
+
+- the `body()` - the code inside the function.
+- the `formals()` - the list of arguments which controls how you can call the function.
+- the `environment()`  the "map" of the location of the function's variables.
+
+```{R}
+#function double
+#functions return the last evaluated object
+#without needing to explicitly use return
+double <- function(x) x * 2
+body(double)
+formals(double)
+environment(double)
+```
+
+##Lexical scoping {.smaller}
+
+Scoping is the set of rules that govern how R looks up the value of a symbol. In the example below, 
+scoping is the set of rules that R applies to go from the symbol x to its value 10:
+
+```{R, eval = FALSE}
+x <- 10
+x
+# [1] 10
+```
+
+Lexical scoping looks up symbol values based on how functions were nested when they were created, not how they are nested when they are called. With lexical scoping, you don't need to know how the function is called to figure out where the value of a variable will be looked up.
+
+## Lexical Scoping - Principles
+
+There are four basic principles behind R's implementation of lexical scoping:
+
+- name masking
+- functions vs. variables
+- a fresh start
+- dynamic lookup
+
+## Name Masking {.smaller .build}
+
+```{R}
+f <- function() {
+  x <- 1
+  y <- 2
+  c(x, y)
+}
+f()
+```
+
+If a name isn't defined inside a function, R will look one level up.
+
+```{R}
+x <- 2
+g <- function() {
+  y <- 1
+  c(x, y)
+}
+g()
+```
+
+## Name Masking - Exercise {.build}
+
+```{R}
+x <- 1
+h <- function() {
+  y <- 2
+  i <- function() {
+    z <- 3
+    c(x, y, z)
+  }
+  i()
+}
+h()
+```
+
+## functions vs. variables {.build}
+
+The same principles apply regardless of the type of associated value - finding functions works exactly the same way as finding variables:
+
+```{R}
+l <- function(x) x + 1
+m <- function() {
+  l <- function(x) x * 2
+  l(10)
+}
+m()
+```
+
+## A fresh start {.build}
+
+```{R}
+j <- function() {
+  if (!exists("a")) {
+    a <- 1
+  } else {
+    a <- a + 1
+  }
+  print(a)
+}
+j()
+j()
+```
+
+## Dynamic Lookup {.smaller .build}
+
+R looks for values when the function is run, not when it's created. This means that the output of a 
+function can be different depending on objects outside its environment:
+
+```{R}
+f <- function() x
+x <- 15
+f()
+
+x <- 20
+f()
+```
+
+## Chapter Summary {.smaller}
+
+R is a functional Programming language in its core.
+
+Function components:
+
+- body
+- formals
+- environment
+
+Lexical Scoping Principals
+
+- Name masking
+- Functions vs Variables
+- A fresh start
+- Dynamic lookup
+
+## Chapter 5
+
+<div class=chapter style='font-size:70px;margin-top:150px'>
+Important Functions
+</div>
+
+## Flow Control {.smaller}
+
+```{R, eval = FALSE}
+#simple case
+if (5 > 1) print('This is TRUE')
+
+#two cases
+a <- 5
+if (a == 5) print(1) else print(2)
+a <- 1
+if (a == 5) print(1) else print(2)
+
+#3+ cases
+if (a == 5) {
+  print(1)
+} else if (a == 3) {
+  print(2)
+} else {
+  print(3)
+}
+```
+
+## Flow Control {.build}
+
+`if` is only used for 1-length vectors. The function is not vectorised i.e. does not work on 
+vectors. For a vectorised version of `if` (e.g. when you want to apply an operation on a data.frame
+column) use the vectorised function `ifelse`
+
+```{R}
+if (1:5 > 3) TRUE else FALSE
+
+ifelse(1:5 > 3, TRUE, FALSE)
+```
+
+## Loops {.smaller}
+
+```{R}
+#for-loop
+for (i in 1:4) {
+  print(i)
+}
+
+#while loop
+a <- 1
+while (a < 5) {
+  print(1)
+  a <- a + 1
+}
+```
+
+
+## Loops - break and next {.build .smaller}
+
+```{R}
+for (i in 1:5) {
+  if (i == 3L) break
+  print(i)
+}
+
+for (i in 1:5) {
+  if (i == 3L) next
+  print(i)
+}
+
+```
+
+## apply family - apply p.1 {.build}
+
+`apply` is a base-R implementation of a for-loop.
+
+```{R}
+#it converts the object into a matrix 
+df <- data.frame(a = 1:5, b = 6:10, c = 11:15)
+
+#column wise operation
+apply(df, 1, sum)
+```
+
+## apply family - apply p.2 {.build}
+
+```{R}
+#row wise operation
+apply(df, 2, sum)
+
+#cell operation
+apply(df, 1:2, double)
+```
+
+## apply family - lapply and sapply {.smaller}
+
+These are C implemented for-loops and therefore very efficient
+
+```{R}
+#lapply performs a column wise operation only
+lapply(df, sum)
+
+#sapply is the same as lapply but it simplifies i.e.
+#converts the list into an atomic vector
+sapply(df, sum)
+```
+
+## apply family - vapply 
+
+`vapply` is my personal favourite of the apply functions. It works with vectors, it is written in C
+but it also requires to tell it what the output of each iteration will be, which makes R preallocate
+resources and thus make it even faster.
+
+```{R}
+#numeric(1) specifies that each iteration will output a number
+vapply(1:10, double, FUN.VALUE = numeric(1))
+```
+
+## apply family - tapply {.smaller}
+
+This is used for grouping operations
+
+```{R}
+values <- 1:6
+groups <- rep(c('a', 'b'), each = 3)
+
+#visualise groups
+data.frame(values = values, groups = groups)
+
+tapply(values, groups, sum)
+```
+
+## Anonymous functions {.smaller}
+
+These are usually created when the function is small and since they will be used for a particular
+case they don't really require a name. It is most common to see anonymous functions to be used in
+conjunction with the apply family functions like `lapply`.
+
+An anonymous function is defined in the exact same way as a named function apart from the `name <-` 
+part of it (which is missing).
+
+```{R}
+#if we want to triple every value for each column of df
+#then we would need an anonymous function, as this is something we will 
+#just do once and there is no predefined function that does it
+df <- data.frame(a = 1:10, b = 6:15, c = 1:10)
+
+lapply(df, function(x) {
+  x * 3
+})
+```
+
+## Chapter Summary
+
+We learnt about:
+
+- for-loops
+- if cases
+- apply family functions
+
+## Case Study {.smaller}
+
+Using the `mtcars` built-in data set, do the following:
+
+1. Write a function that will determine outliers in a vector. The function should use the IQR 
+(interquartile range) method in order to identify outliers within the vector. A data point is 
+considered an outlier if x is less than (25% quantile - 1.5 \* IQR ) or greater than 
+(75% quantile + 1.5 \* IQR). Hint: (See `?IQR`).
+2. Order the data.frame on `cyl` ascending.
+3. Find the outliers of `mpg` (using the above function) in groups defined by `cyl` (imagine `cyl` 
+values splitting the data.frame into three smaller ones - find the outliers in those).
+4. Remove the outliers from the data.frame.
+5. Get the second highest value for each one of the columns of the data.frame (after the removal
+of outliers).
+
+## Case Study Answers {.smaller}
+
+```{R}
+#save mtcars in a variable
+df <- mtcars
+
+#define the function
+outlier <- function(x) {
+ ifelse(x < quantile(x, 0.25) - 1.5 * IQR(x) | x > quantile(x, 0.75) + 1.5 * IQR(x), TRUE, FALSE)
+}
+
+#order
+df <- df[order(df$cyl), ]
+
+#outliers
+out <- unname(unlist(tapply(df$mpg, factor(df$cyl), outlier)))
+
+#remove outliers
+df <- df[out, ]
+
+#second highest
+second_highest <- lapply(df, function(x) sort(x)[2])
+```
