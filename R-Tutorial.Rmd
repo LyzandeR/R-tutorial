@@ -127,8 +127,8 @@ array(1:8, c(2, 2, 2))
 ```{R}
 #nested lists
 list(list('a'), 
-     list(data.frame(a = 1:2), 
-     list(letters[1:5])))
+     list(data.frame(a = 1:2)), 
+     list(letters[1:5]))
 ```
 </div>
 
@@ -196,7 +196,7 @@ How many functions do you know?
 letters[1:5]
 
 #same for factors
-factor(letters[1:5])
+factor(letters)[1:5]
 ```
 
 ## [ function - 2 Dimensions DS p.1 {.build}
