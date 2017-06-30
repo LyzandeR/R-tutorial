@@ -666,14 +666,14 @@ for (i in 1:5) {
 #it converts the object into a matrix 
 df <- data.frame(a = 1:5, b = 6:10, c = 11:15)
 
-#column wise operation
+#row wise operation
 apply(df, 1, sum)
 ```
 
 ## apply family - apply p.2 {.build}
 
 ```{R}
-#row wise operation
+#column wise operation
 apply(df, 2, sum)
 
 #cell operation
