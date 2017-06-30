@@ -847,14 +847,14 @@ while (a &lt; 5) {
 <pre class = 'prettyprint lang-r'>#it converts the object into a matrix 
 df &lt;- data.frame(a = 1:5, b = 6:10, c = 11:15)
 
-#column wise operation
+#row wise operation
 apply(df, 1, sum)</pre>
 
 <pre >## [1] 18 21 24 27 30</pre>
 
 </article></slide><slide class=''><hgroup><h2>apply family - apply p.2</h2></hgroup><article  id="apply-family---apply-p.2" class="build">
 
-<pre class = 'prettyprint lang-r'>#row wise operation
+<pre class = 'prettyprint lang-r'>#column wise operation
 apply(df, 2, sum)</pre>
 
 <pre >##  a  b  c 
