@@ -442,7 +442,7 @@ Functions
 
 ## Functions
 
-R in its core is a function programming language, so solid foundation of how functions work is 
+R in its core is a functional programming language, so solid foundation of how functions work is 
 essential when working with R.
 
 John Chambers has said:
