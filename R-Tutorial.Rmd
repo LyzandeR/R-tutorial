@@ -299,7 +299,7 @@ R is a functional programming language which means that a huge amount of functio
 Part of mastering the R programming language is having a good vocabulary (otherwise you will 
 find yourselves re-inventing the wheel on many occassions!).
 
-I have included the most used functions below but ou can find a more comprehensive vocabulary guide 
+I have included the most used functions below but you can find a more comprehensive vocabulary guide 
 here:
 
 [Vocabulary](http://adv-r.had.co.nz/Vocabulary.html)
